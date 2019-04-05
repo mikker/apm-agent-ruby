@@ -33,13 +33,10 @@ module ElasticAPM
           threads = (0..9).map do |i|
             Thread.new do
               subject.write(%({"thread": #{i}}))
-              # sleep((10..30).to_a.sample / 10.0)
             end
           end
 
-          threads.each_with_index do |thread, i|
-            thread.join
-          end
+          threads.each(&:join)
 
           expect(subject).to be_connected
 
