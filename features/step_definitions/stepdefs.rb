@@ -14,7 +14,11 @@ After do
 end
 
 Given('an agent') do
-  @agent = ElasticAPM.start
+  # provided by World
+end
+
+Given('an application') do
+  # provided by World
 end
 
 When('an api key is set to {string} in the config') do |api_key|
@@ -45,4 +49,20 @@ end
 Then('the secret token is sent in the Authorization header') do
   headers = ElasticAPM::Transport::Headers.new(config).to_h
   headers[:Authorization].include?(config.secret_token)
+end
+
+When(%r{([/a-z0-9]+) is requested}) do |path|
+  @response = get path
+end
+
+Then(%r{(\d+) metadatas? (is|are) sent}) do |count, *|
+  wait_for metadatas: count
+end
+
+Then(%r{(\d+) transactions? (is|are) sent}) do |count, *|
+  wait_for transactions: count
+end
+
+Then(%r{(\d+) spans? (is|are) sent}) do |count, *|
+  wait_for spans: count
 end

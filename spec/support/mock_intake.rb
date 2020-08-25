@@ -199,4 +199,4 @@ RSpec.configure do |config|
   end
 
   config.include MockIntake::WaitFor, :mock_intake
-end
+end if defined?(RSpec.configure)
